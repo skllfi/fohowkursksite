@@ -8,18 +8,29 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+
     steps:
+      # 1. Клонируем репозиторий
       - uses: actions/checkout@v3
 
+      # 2. Устанавливаем Node.js
       - uses: actions/setup-node@v3
         with:
           node-version: '20'
 
+      # 3. Устанавливаем зависимости проекта
+      - run: npm install
+
+      # 4. Сборка проекта
+      - run: npm run build
+
+      # 5. Устанавливаем Firebase CLI
       - run: npm install -g firebase-tools
 
+      # 6. Деплой на Firebase Hosting
       - name: Deploy to Firebase
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
-          echo $FIREBASE_SERVICE_ACCOUNT > serviceAccountKey.json
+          echo "$FIREBASE_SERVICE_ACCOUNT" > serviceAccountKey.json
           firebase deploy --only hosting --project fohow-site --token "$(cat serviceAccountKey.json | jq -r .token)"
