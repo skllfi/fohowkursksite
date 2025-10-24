@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "твоя_apiKey",
+      authDomain: "fohow-site.firebaseapp.com",
+      projectId: "fohow-site",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    async function login() {
+      await signInWithPopup(auth, provider);
+      alert("Logged in!");
+    }
+
+    async function addProduct() {
+      const name = document.querySelector("#name").value;
+      const desc = document.querySelector("#desc").value;
+      const price = document.querySelector("#price").value;
+
+      await addDoc(collection(db, "products"), { name, description: desc, price: Number(price) });
+      alert("Product added!");
+    }
+
+    window.login = login;
+    window.addProduct = addProduct;
+  </script>
+</head>
+<body>
+  <h2>Админка Fohow</h2>
+  <button onclick="login()">Login with Google</button>
+  <hr>
+  <input id="name" placeholder="Название">
+  <input id="desc" placeholder="Описание">
+  <input id="price" type="number" placeholder="Цена">
+  <button onclick="addProduct()">Сохранить</button>
+</body>
+</html>
