@@ -1,0 +1,16 @@
+# Settings to manage and configure a Firebase App Hosting backend.
+# https://firebase.google.com/docs/app-hosting/configure
+
+requires: ["FIREBASE_AUTH"]
+
+entrypoint: next start
+
+files:
+  - "./package.json"
+  - "./.next"
+  - "./public"
+
+runConfig:
+  # Increase this value if you'd like to automatically spin up
+  # more instances in response to increased traffic.
+  maxInstances: 1
