@@ -1,11 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <title>Fohow Site</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+    .card { border: 1px solid #ccc; border-radius: 6px; padding: 15px; margin: 10px 0; background: #fff; }
+    h1 { color: #b8860b; }
+  </style>
 </head>
 <body>
-  <div id="app"></div>
-  <script type="module" src="/src/main.js"></script>
-</body>
-</html>
+  <h1>Продукты Fohow</h1>
+  <div id="products">Загрузка...</div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "твоя_apiKey",
+      authDomain: "fohow-site.firebaseapp.com",
+      projectId: "fohow-site",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
