@@ -28,7 +28,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-body antialiased bg-[#FDFBF8]">
+      <body className="font-body antialiased bg-background text-foreground">
         <Header />
         {children}
         <Toaster />

@@ -1,10 +1,15 @@
-'use client';
 
 import { products } from '@/lib/product-data';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+
+export async function generateStaticParams() {
+  return products.map((product) => ({
+    id: product.id,
+  }));
+}
 
 export default function ProductPage({ params }: { params: { id: string } }) {
   const product = products.find((p) => p.id === params.id);
@@ -22,8 +27,8 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             <Image
               src={product.image}
               alt={product.name}
-              layout="fill"
-              objectFit="cover"
+              fill
+              className="object-cover"
             />
           </div>
 
