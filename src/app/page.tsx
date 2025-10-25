@@ -1,168 +1,153 @@
-'use client';
-
-import { useState, useMemo } from 'react';
+import { ArrowRight, Heart, Shield, Truck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import type { Product } from '@/lib/products';
-import productsDataSource from '@/lib/products.json';
-import ProductGrid from '@/components/fohow/ProductGrid';
-import HealthPrograms from '@/components/fohow/HealthPrograms';
-import ProductModal from '@/components/fohow/ProductModal';
-import Footer from '@/components/fohow/Footer';
+import { Card, CardContent } from '@/components/ui/card';
+import Image from 'next/image';
+import Link from 'next/link';
 
-type Tab = 'deals' | 'products' | 'programs';
-
-const categoryLabels: { [key: string]: string } = {
-  bioregulation: 'Регуляция',
-  detox: 'Очистка',
-  restoration: 'Восстановление',
-  cosmetics: 'Косметика',
-  hygiene: 'Гигиена',
-};
-
-const allProducts: Product[] = productsDataSource.products;
-
-const allFilters = [
-  { label: 'Все', value: 'all' },
-  ...Array.from(new Set(allProducts.map((p) => p.category))).map(
-    (category) => ({
-      label: categoryLabels[category] || category,
-      value: category,
-    })
-  ),
-];
-
-export default function Home() {
-  const [activeTab, setActiveTab] = useState<Tab>('deals');
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [activeFilter, setActiveFilter] = useState('all');
-
-  const handleTabChange = (tab: Tab) => {
-    setActiveTab(tab);
-    setActiveFilter('all'); // Сбрасываем фильтр при смене вкладки
-  };
-
-  const currentProducts = useMemo(() => {
-    let baseProducts;
-    switch (activeTab) {
-      case 'deals':
-        baseProducts = allProducts.filter((p) => p.isFeatured);
-        break;
-      case 'products':
-        baseProducts = allProducts;
-        break;
-      default:
-        return [];
-    }
-
-    if (activeFilter === 'all') {
-      return baseProducts;
-    }
-    return baseProducts.filter((p) => p.category === activeFilter);
-  }, [activeTab, activeFilter]);
-
-
-  const currentFilters = useMemo(() => {
-    if (activeTab === 'products') {
-      return allFilters;
-    }
-    if (activeTab === 'deals') {
-      const featuredProducts = allProducts.filter(p => p.isFeatured);
-      const featuredCategories = new Set(featuredProducts.map(p => p.category));
-      return [
-        { label: 'Все', value: 'all' },
-        ...Array.from(featuredCategories).map(category => ({
-          label: categoryLabels[category] || category,
-          value: category,
-        }))
-      ];
-    }
-    return [];
-  }, [activeTab]);
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'deals':
-      case 'products':
-        return (
-          <ProductGrid
-            products={currentProducts}
-            onProductSelect={setSelectedProduct}
-          />
-        );
-      case 'programs':
-        return <HealthPrograms />;
-      default:
-        return null;
-    }
-  };
-
-  const TabButton = ({
-    tab,
-    label,
-    isFeatured = false,
-  }: {
-    tab: Tab;
-    label: string;
-    isFeatured?: boolean;
-  }) => (
-    <Button
-      onClick={() => handleTabChange(tab)}
-      className={`rounded-full px-6 py-2 text-sm md:text-base font-medium border-2 transition-all duration-300 ${
-        activeTab === tab
-          ? isFeatured
-            ? 'bg-primary text-primary-foreground border-primary-foreground/50 shadow-lg scale-105'
-            : 'bg-primary text-primary-foreground border-primary-foreground/50 shadow-md'
-          : isFeatured
-          ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200 border-transparent'
-          : 'bg-white text-gray-700 hover:bg-gray-100 border-transparent'
-      }`}
-    >
-      {label}
-    </Button>
-  );
-  
-  const FilterButton = ({ label, value }: { label: string; value: string }) => (
-    <Button
-      key={value}
-      variant={activeFilter === value ? 'default' : 'outline'}
-      onClick={() => setActiveFilter(value)}
-      className={`rounded-full px-4 py-2 text-sm transition-all duration-200 ${
-        activeFilter === value
-          ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-          : 'bg-white text-gray-700 hover:bg-gray-100'
-      }`}
-    >
-      {label}
-    </Button>
-  );
-
+export default function HomePage() {
   return (
-    <div className="bg-[#FDFBF8] text-gray-800">
-      <div className="container mx-auto p-4 md:p-8">
-        <nav className="flex justify-center items-center space-x-2 md:space-x-4 my-8 bg-white p-2 rounded-full shadow-sm max-w-lg mx-auto">
-          <TabButton tab="deals" label="🔥 Сейчас выгодно" isFeatured={true} />
-          <TabButton tab="products" label="Обзор Продукции" />
-          <TabButton tab="programs" label="Программы" />
-        </nav>
-
-        {(activeTab === 'products' || activeTab === 'deals') && currentFilters.length > 1 && (
-            <div className="flex flex-wrap justify-center gap-2 mb-8">
-              {currentFilters.map((filter) => (
-                <FilterButton key={filter.value} label={filter.label} value={filter.value} />
-              ))}
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-primary/10 via-background to-accent/10 py-20 md:py-32">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h1 className="mb-6">
+                Натуральная продукция для здоровья и благополучия
+              </h1>
+              <p className="text-lg text-muted-foreground mb-8">
+                Откройте для себя премиальные БАДы и продукцию для здоровья от Fohow. 
+                Традиционная мудрость встречается с современной наукой для вашего благополучия.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Button size="lg" asChild>
+                  <Link href="/products">
+                    Смотреть продукцию
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" asChild>
+                  <Link href="/contacts">
+                    Связаться с нами
+                  </Link>
+                </Button>
+              </div>
             </div>
-        )}
+            <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-2xl">
+              <Image
+                src="https://images.unsplash.com/photo-1713434638446-13b4a15b728e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoZWFsdGglMjB3ZWxsbmVzcyUyMHByb2R1Y3RzfGVufDF8fHx8MTc2MTM0Mjc3MXww&ixlib=rb-4.1.0&q=80&w=1080"
+                alt="Продукция для здоровья"
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <main>{renderContent()}</main>
-      </div>
+      {/* About Section */}
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <h2 className="mb-4">Почему выбирают Fohow?</h2>
+            <p className="text-muted-foreground">
+              Мы предоставляем продукцию высочайшего качества, основанную на традиционных 
+              знаниях и современных исследованиях.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card>
+              <CardContent className="pt-6 text-center">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <Shield className="h-8 w-8 text-primary" />
+                </div>
+                <h5 className="mb-2">Премиум качество</h5>
+                <p className="text-sm text-muted-foreground">
+                  Все продукты сертифицированы и протестированы на чистоту и эффективность.
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="pt-6 text-center">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <Heart className="h-8 w-8 text-primary" />
+                </div>
+                <h5 className="mb-2">Натуральные ингредиенты</h5>
+                <p className="text-sm text-muted-foreground">
+                  Природные компоненты с традиционными формулами для оптимального здоровья.
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="pt-6 text-center">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <Truck className="h-8 w-8 text-primary" />
+                </div>
+                <h5 className="mb-2">Быстрая доставка</h5>
+                <p className="text-sm text-muted-foreground">
+                  Надежная доставка по всей России и за её пределами.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
 
-      {selectedProduct && (
-        <ProductModal
-          product={selectedProduct}
-          onClose={() => setSelectedProduct(null)}
-        />
-      )}
-      <Footer />
+      {/* Popular Products Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between mb-12">
+            <div>
+              <h2 className="mb-2">Популярная продукция</h2>
+              <p className="text-muted-foreground">
+                Откройте для себя наши самые популярные продукты для здоровья
+              </p>
+            </div>
+            <Button variant="outline" asChild>
+                <Link href="/products">
+                    Смотреть всё
+                </Link>
+            </Button>
+          </div>
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Популярные товары пока не добавлены</p>
+            </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="mb-4 text-primary-foreground">
+            Начните ваш путь к здоровью сегодня
+          </h2>
+          <p className="text-lg mb-8 max-w-2xl mx-auto opacity-90">
+            Присоединяйтесь к тысячам довольных клиентов, которые улучшили своё здоровье 
+            с премиальной продукцией Fohow.
+          </p>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Button
+              size="lg"
+              variant="secondary"
+              asChild
+            >
+              <Link href="/products">
+                Смотреть продукцию
+               </Link>
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary"
+              asChild
+            >
+              <Link href="/contacts">
+                Связаться с нами
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
