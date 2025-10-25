@@ -1,16 +1,17 @@
 {
-  // "hosting": {
-  //   "public": "fohowkursk/out",
-  //   "ignore": [
-  //     "firebase.json",
-  //     "**/.*",
-  //     "**/node_modules/**"
-  //   ],
-  //   "rewrites": [
-  //     {
-  //       "source": "**",
-  //       "destination": "/index.html"
-  //     }
-  //   ]
-  // }
+  "hosting": {
+    "target": "fohow-kursk",
+    "public": "out",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
 }
